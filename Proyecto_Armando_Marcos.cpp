@@ -241,8 +241,31 @@ void mostrar(rubros **r, factura **f, cliente **c, lote **l, sucursal **s) {
 	}
 }
 
-void consultas(rubros **r, factura **f, cliente **c, lote **l, sucursal **s) {
+void consulta_cliente
 
+void consultas(rubros **r, factura **f, cliente **c, lote **l, sucursal **s) {
+	int op = -1;
+	while (op) {
+		system("cls");
+		printf("\n\tMENU CONSULTAS\n\n");
+		printf("1.\tDado un cliente\n");
+		printf("2.\tDado una sucursal\n");
+		printf("3.\tDado un rubro\n");
+		printf("4.\tDado un lote\n");
+		printf("0.\tSALIR\n\n");
+		scanf("%i", &op);
+
+		switch (op) {
+		case 1: consulta_cliente(c);
+			break;
+		case 2: consulta_sucursal(s);
+			break;
+		case 3: consulta_rubro(r);
+			break;
+		case 4: consulta_lote(l);
+			break;
+		}
+	}
 }
 
 int  main() {
