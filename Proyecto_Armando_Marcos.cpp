@@ -25,7 +25,7 @@ struct lote {
 	char rubro[30];
 	char subcategoria[30];
 	int unidades;
-	int exitencia;
+	int existencia;
 	float peso;
 	double costo;
 	lote *prox;
@@ -37,7 +37,7 @@ struct cliente {
 };
 
 struct subfactura {
-	char codigo[30];
+	char codigo_lote[30];
 	int unidades;
 	double precio;
 	double venta;
@@ -64,6 +64,20 @@ int buscar_rubro(rubros **r, char palabra[30]) {
 	return 0;
 }
 
+int buscar_subrubro(rubros **r, char rub[30], char subrub[30]) {
+	rubros *t = *r;
+	subrubros *s;
+	while (t){
+		if (t->abajo && t->nombre==rub) {
+			s = t->abajo;
+			while (s && s->nombre != subrub) s = s->abajo;
+			if (s) { return 1; } else return 0;
+		}
+		t = t->prox;
+	}
+	return 0;
+}
+
 int buscar_cliente(cliente **c, char palabra[30]) {
 	cliente *t = *c;
 	if (t->nombre == palabra) return 1;
@@ -76,6 +90,14 @@ int buscar_lote(lote **l, char palabra[30]) {
 	lote *t = *l;
 	if (t->codigo == palabra) return 1;
 	while (t && t->prox && t->prox->codigo != palabra) t = t->prox;
+	if (t->prox) return 1;
+	return 0;
+}
+
+int buscar_sucursal(sucursal **s, char palabra[30]) {
+	sucursal *t = *s;
+	if (t->nombre == palabra) return 1;
+	while (t && t->prox && t->prox->nombre != palabra) t = t->prox;
 	if (t->prox) return 1;
 	return 0;
 }
@@ -125,7 +147,25 @@ void agregar_cliente(cliente **c,char palabra[30]) {
 		*c = p;
 }
 
-void agregar_lote(lote **l,) {
+void agregar_lote(lote **l, char codigo[30], char sucur[30], char rub[30], char subrub[30], int unidades, float peso, double costo) {
+	lote *t = *l, *aux;
+	if (t) {
+
+	}
+	else {
+		aux = new lote;
+		strcpy(aux->codigo, codigo);
+		strcpy(aux->sucursal, sucur);
+		strcpy(aux->rubro, rub);
+		strcpy(aux->subcategoria, subrub);
+		aux->unidades = unidades;
+		aux->existencia = unidades;
+		t->peso = peso;
+		t->costo = costo;
+	}
+}
+
+void agregar_sucursal(sucursal **s, char palabra[30]) {
 
 }
 
@@ -148,8 +188,10 @@ void agregar_rubro_principal(rubros **r) {
 				printf("Ingrese el nombre del rubro: ");
 				scanf("%s", &palabra);
 				cont++;
-			} while (!(buscar_rubro(r, palabra)));
+			} while (buscar_rubro(r, palabra));
 			agregar_rubro(r, palabra);
+			printf("Rubro agregado satisfactoriamente!");
+			system("pause");
 			break;
 		case 2: cont = 0;
 			do {
@@ -157,17 +199,18 @@ void agregar_rubro_principal(rubros **r) {
 				printf("Ingrese el nombre del rubro: ");
 				scanf("%s", &palabra);
 				cont++;
-			} while (!(buscar_rubro(r, palabra)));
+			} while (buscar_rubro(r, palabra));
 			printf("Ingrese el nombre de la subcategoria: ");
 			scanf("%s", &palabra2);
 			agregar_subrubro(r, palabra, palabra2);
+			printf("Subcategoria de rubro agregada satisfactoriamente!");
+			system("pause");
 			break;
 		}
 	}
 }
 
 void agregar_factura_principal(factura **f) {
-
 	int op = -1;
 	while (op) {
 		system("cls");
@@ -205,27 +248,96 @@ void agregar_cliente_principal(cliente **c) {
 		printf("Ingrese el nombre del cliente: ");
 		scanf("%s", &palabra);
 		cont++;
-	} while (!(buscar_cliente(c, palabra)));
+	} while (buscar_cliente(c, palabra));
 	agregar_cliente(c, palabra);
+	printf("Cliente agregado satisfactoriamente!");
+	system("pause");
 }
 
-void agregar_lote_principal(lote **l) {
+void agregar_lote_principal(rubros **r, factura **f, cliente **c, lote **l, sucursal **s) {
 	system("cls");
 	printf("\n\tAGREGAR LOTE\n\n");
 	int cont = 0;
 	char codigo[30];
 	do {
 		if (cont) printf("\nError! Ingrese un lote que no exista!\n");
-		printf("Ingrese el nombre del cliente: ");
+		printf("Ingrese el codigo del lote: ");
 		scanf("%s", &codigo);
 		cont++;
-	} while (!(buscar_lote(l, codigo)));
-
-	agregar_lote(l, codigo);
+	} while (buscar_lote(l, codigo));
+	printf("\n");
+	cont = 0;
+	char sucur[30];
+	do {
+		if (cont) printf("\nError! Ingrese una sucursal que exista!\n");
+		printf("Ingrese la sucursal: ");
+		scanf("%s", &sucur);
+		cont++;
+	} while (!(buscar_sucursal(s, sucur)));
+	printf("\n");
+	cont = 0;
+	char rub[30];
+	do {
+		if (cont) printf("\nError! Ingrese un rubro que exista!\n");
+		printf("Ingrese el rubro: ");
+		scanf("%s", &rub);
+		cont++;
+	} while (!(buscar_rubro(r, rub)));
+	printf("\n");
+	cont = 0;
+	char subrub[30];
+	do {
+		if (cont) printf("\nError! Ingrese una subcategoria de rubro que exista en el rubro indicado!\n");
+		printf("Ingrese la subcategoria de rubro: ");
+		scanf("%s", &subrub);
+		cont++;
+	} while (!(buscar_subrubro(r, rub, subrub)));
+	printf("\n");
+	cont = 0;
+	int unidades;
+	do {
+		if (cont) printf("\nError! Ingrese mas de 0 unidades!\n");
+		printf("Ingrese las unidades: ");
+		scanf("%s", &unidades);
+		cont++;
+	} while (unidades<=0);
+	printf("\n");
+	cont = 0;
+	float peso;
+	do {
+		if (cont) printf("\nError! Ingrese un peso positivo!\n");
+		printf("Ingrese el peso en Kg por unidad: ");
+		scanf("%f", &peso);
+		cont++;
+	} while (peso<=0);
+	printf("\n");
+	cont = 0;
+	double costo;
+	do {
+		if (cont) printf("\nError! Ingrese un costo positivo!\n");
+		printf("Ingrese el costo en BsF por unidad: ");
+		scanf("%f", &costo);
+		cont++;
+	} while (costo <= 0);
+	agregar_lote(l, codigo,sucur,rub,subrub,unidades,peso,costo);
+	printf("Lote agregado satisfactoriamente!");
+	system("pause");
 }
 
 void agregar_sucursal_principal(sucursal **s) {
-	
+	system("cls");
+	printf("\n\tAGREGAR SUCURSAL\n\n");
+	int cont = 0;
+	char palabra[30];
+	do {
+		if (cont) printf("\nError! Ingrese una sucursal que no exista!\n");
+		printf("Ingrese la sucursal: ");
+		scanf("%s", &palabra);
+		cont++;
+	} while (buscar_sucursal(s, palabra));
+	agregar_sucursal(s, palabra);
+	printf("Sucursal agregado satisfactoriamente!");
+	system("pause");
 }
 
 
@@ -249,7 +361,7 @@ void agregar(rubros **r, factura **f, cliente **c, lote **l, sucursal **s) {
 			break;
 		case 3: agregar_cliente_principal(c);
 			break;
-		case 4: agregar_lote_principal(l);
+		case 4: agregar_lote_principal(r,f,c,l,s);
 			break;
 		case 5: agregar_sucursal_principal(s);
 			break;
