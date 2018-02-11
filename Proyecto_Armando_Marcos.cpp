@@ -64,6 +64,22 @@ int buscar_rubro(rubros **r, char palabra[30]) {
 	return 0;
 }
 
+int buscar_cliente(cliente **c, char palabra[30]) {
+	cliente *t = *c;
+	if (t->nombre == palabra) return 1;
+	while (t && t->prox && t->prox->nombre != palabra) t = t->prox;
+	if (t->prox) return 1;
+	return 0;
+}
+
+int buscar_lote(lote **l, char palabra[30]) {
+	lote *t = *l;
+	if (t->codigo == palabra) return 1;
+	while (t && t->prox && t->prox->codigo != palabra) t = t->prox;
+	if (t->prox) return 1;
+	return 0;
+}
+
 void agregar_rubro(rubros **r, char palabra[30]) {
 	rubros *p = new rubros;
 	rubros *t = *r;
@@ -93,6 +109,24 @@ void agregar_subrubro(rubros **r, char palabra[30], char palabra2[30]) {
 			s->abajo = nuevo;
 		}
 	}
+}
+
+void agregar_cliente(cliente **c,char palabra[30]) {
+	cliente *t = *c,*p = new cliente;
+	strcpy(p->nombre, palabra);
+	p->prox = NULL;
+	if (*c) {
+		while ((t) && (t->prox)) {
+			t = t->prox;
+		}
+		t->prox = p;
+	}
+	else
+		*c = p;
+}
+
+void agregar_lote(lote **l,) {
+
 }
 
 void agregar_rubro_principal(rubros **r) {
@@ -132,6 +166,69 @@ void agregar_rubro_principal(rubros **r) {
 	}
 }
 
+void agregar_factura_principal(factura **f) {
+
+	int op = -1;
+	while (op) {
+		system("cls");
+		printf("\n\tAGREGAR FACTURA\n\n");
+		printf("1.\tRubro\n");
+		printf("2.\tFactura\n");
+		printf("3.\tCliente\n");
+		printf("4.\tLote\n");
+		printf("5.\tSucursal\n");
+		printf("0.\tSALIR\n\n");
+		scanf("%i", &op);
+
+		switch (op) {
+		case 1: agregar_rubro_principal(r);
+			break;
+		case 2: agregar_factura_principal(f);
+			break;
+		case 3: agregar_cliente_principal(c);
+			break;
+		case 4: agregar_lote_principal(l);
+			break;
+		case 5: agregar_sucursal_principal(s);
+			break;
+		}
+	}
+}
+
+void agregar_cliente_principal(cliente **c) {
+	system("cls");
+	printf("\n\tAGREGAR CLIENTE\n\n");
+	int cont = 0;
+	char palabra[30];
+	do {
+		if (cont) printf("\nError! Ingrese un cliente que no exista!\n");
+		printf("Ingrese el nombre del cliente: ");
+		scanf("%s", &palabra);
+		cont++;
+	} while (!(buscar_cliente(c, palabra)));
+	agregar_cliente(c, palabra);
+}
+
+void agregar_lote_principal(lote **l) {
+	system("cls");
+	printf("\n\tAGREGAR LOTE\n\n");
+	int cont = 0;
+	char codigo[30];
+	do {
+		if (cont) printf("\nError! Ingrese un lote que no exista!\n");
+		printf("Ingrese el nombre del cliente: ");
+		scanf("%s", &codigo);
+		cont++;
+	} while (!(buscar_lote(l, codigo)));
+
+	agregar_lote(l, codigo);
+}
+
+void agregar_sucursal_principal(sucursal **s) {
+	
+}
+
+
 void agregar(rubros **r, factura **f, cliente **c, lote **l, sucursal **s) {
 	int op = -1;
 	while (op) {
@@ -148,13 +245,13 @@ void agregar(rubros **r, factura **f, cliente **c, lote **l, sucursal **s) {
 		switch (op) {
 		case 1: agregar_rubro_principal(r);
 			break;
-		case 2: agregar_factura(f);
+		case 2: agregar_factura_principal(f);
 			break;
-		case 3: agregar_cliente(c);
+		case 3: agregar_cliente_principal(c);
 			break;
-		case 4: agregar_lote(l);
+		case 4: agregar_lote_principal(l);
 			break;
-		case 5: agregar_sucursal(s);
+		case 5: agregar_sucursal_principal(s);
 			break;
 		}
 	}
