@@ -205,7 +205,7 @@ void agregar_cliente_principal(cliente **c) {
 		printf("Ingrese el nombre del cliente: ");
 		scanf("%s", &palabra);
 		cont++;
-	} while (!(buscar_cliente(c, palabra)));
+	} while (buscar_cliente(c, palabra));
 	agregar_cliente(c, palabra);
 }
 
@@ -216,12 +216,30 @@ void agregar_lote_principal(lote **l) {
 	char codigo[30];
 	do {
 		if (cont) printf("\nError! Ingrese un lote que no exista!\n");
-		printf("Ingrese el nombre del cliente: ");
+		printf("Ingrese el codigo del lote: ");
 		scanf("%s", &codigo);
 		cont++;
-	} while (!(buscar_lote(l, codigo)));
+	} while (buscar_lote(l, codigo));
+	printf("\n");
+	cont = 0;
+	char sucur[30];
+	do {
+		if (cont) printf("\nError! Ingrese una sucursal que exista!\n");
+		printf("Ingrese la sucursal: ");
+		scanf("%s", &sucur);
+		cont++;
+	} while (!(buscar_sucursal(l, sucur)));
+	printf("\n");
+	cont = 0;
+	char rub[30];
+	do {
+		if (cont) printf("\nError! Ingrese una sucursal que exista!\n");
+		printf("Ingrese la sucursal: ");
+		scanf("%s", &rub);
+		cont++;
+	} while (!(buscar_rubro(l, sucur)));
 
-	agregar_lote(l, codigo);
+	agregar_lote(l, codigo,sucur,rub,subrub,unidades,existencia,peso,costo);
 }
 
 void agregar_sucursal_principal(sucursal **s) {
@@ -249,7 +267,7 @@ void agregar(rubros **r, factura **f, cliente **c, lote **l, sucursal **s) {
 			break;
 		case 3: agregar_cliente_principal(c);
 			break;
-		case 4: agregar_lote_principal(l);
+		case 4: agregar_lote_principal(r,f,c,l,s);
 			break;
 		case 5: agregar_sucursal_principal(s);
 			break;
