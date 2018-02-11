@@ -132,6 +132,48 @@ void agregar_rubro_principal(rubros **r) {
 	}
 }
 
+void agregar_factura_principal(factura **f) {
+
+	int op = -1;
+	while (op) {
+		system("cls");
+		printf("\n\tAGREGAR FACTURA\n\n");
+		printf("1.\tRubro\n");
+		printf("2.\tFactura\n");
+		printf("3.\tCliente\n");
+		printf("4.\tLote\n");
+		printf("5.\tSucursal\n");
+		printf("0.\tSALIR\n\n");
+		scanf("%i", &op);
+
+		switch (op) {
+		case 1: agregar_rubro_principal(r);
+			break;
+		case 2: agregar_factura_principal(f);
+			break;
+		case 3: agregar_cliente_principal(c);
+			break;
+		case 4: agregar_lote_principal(l);
+			break;
+		case 5: agregar_sucursal_principal(s);
+			break;
+		}
+	}
+}
+
+void agregar_cliente_principal(cliente **c) {
+
+}
+
+void agregar_lote_principal(lote **l) {
+
+}
+
+void agregar_sucursal_principal(sucursal **s) {
+	
+}
+
+
 void agregar(rubros **r, factura **f, cliente **c, lote **l, sucursal **s) {
 	int op = -1;
 	while (op) {
@@ -148,13 +190,13 @@ void agregar(rubros **r, factura **f, cliente **c, lote **l, sucursal **s) {
 		switch (op) {
 		case 1: agregar_rubro_principal(r);
 			break;
-		case 2: agregar_factura(f);
+		case 2: agregar_factura_principal(f);
 			break;
-		case 3: agregar_cliente(c);
+		case 3: agregar_cliente_principal(c);
 			break;
-		case 4: agregar_lote(l);
+		case 4: agregar_lote_principal(l);
 			break;
-		case 5: agregar_sucursal(s);
+		case 5: agregar_sucursal_principal(s);
 			break;
 		}
 	}
@@ -244,6 +286,8 @@ void mostrar(rubros **r, factura **f, cliente **c, lote **l, sucursal **s) {
 void consultas(rubros **r, factura **f, cliente **c, lote **l, sucursal **s) {
 
 }
+
+//HOLA
 
 int  main() {
 	rubros *r;
