@@ -24,10 +24,10 @@ struct lote {
 	char sucursal[30];
 	char rubro[30];
 	char subcategoria[30];
-	int unidades;
-	int existencia;
+	long int unidades;
+	long int existencia;
 	float peso;
-	double costo;
+	long double costo;
 	lote *prox;
 };
 
@@ -38,9 +38,9 @@ struct cliente {
 
 struct subfactura {
 	char codigo_lote[30];
-	int unidades;
-	double precio;
-	double venta;
+	long int unidades;
+	long double precio;
+	long double venta;
 	subfactura *abajo;
 };
 
@@ -51,7 +51,7 @@ struct factura {
 	int mes;
 	int year;
 	char cliente[30];
-	int total;
+	long int total;
 	factura *prox;
 	subfactura *abajo;
 };
@@ -110,7 +110,7 @@ int buscar_factura(factura **f, char palabra[30]) {
 	return 0;
 }
 
-int obtener_existentes_lote(lote **l, char palabra[30]) {
+long int obtener_existentes_lote(lote **l, char palabra[30]) {
 	lote *t = *l;
 	while (t) {
 		if (strcmp(t->codigo,palabra)==0) return (t->existencia);
@@ -119,7 +119,7 @@ int obtener_existentes_lote(lote **l, char palabra[30]) {
 	return 0;
 }
 
-int obtener_precio_lote(lote **l, char palabra[30]) {
+long double obtener_precio_lote(lote **l, char palabra[30]) {
 	lote *t = *l;
 	while (t) {
 		if (strcmp(t->codigo, palabra) == 0) return (t->costo);
@@ -179,7 +179,7 @@ void agregar_cliente(cliente **c,char palabra[30]) {
 		*c = p;
 }
 
-void agregar_lote(lote **l, char codigo[30], char sucur[30], char rub[30], char subrub[30], int unidades, int existencia, float peso, double costo) {
+void agregar_lote(lote **l, char codigo[30], char sucur[30], char rub[30], char subrub[30], long int unidades, long int existencia, float peso, long double costo) {
 	lote *t = *l, *aux = new lote;
 	strcpy(aux->codigo, codigo);
 	strcpy(aux->sucursal, sucur);
@@ -214,7 +214,7 @@ void agregar_sucursal(sucursal **s, char palabra[30]) {
 
 }
 
-void agregar_factura(factura **f,char codigo[30], char sucursal[30], int dia, int mes, int year, char cliente[30], int total) {
+void agregar_factura(factura **f,char codigo[30], char sucursal[30], int dia, int mes, int year, char cliente[30], long int total) {
 	factura *t = *f, *aux = new factura;
 	strcpy(aux->codigo,codigo);
 	strcpy(aux->sucursal, sucursal);
@@ -233,7 +233,7 @@ void agregar_factura(factura **f,char codigo[30], char sucursal[30], int dia, in
 	}
 }
 
-void agregar_subfactura(factura **f, char codigo[30], char codigo_lote[30], int unidades, double precio, double venta) {
+void agregar_subfactura(factura **f, char codigo[30], char codigo_lote[30], long int unidades, long double precio, long double venta) {
 	if (*f) {
 		factura *t = *f;
 		subfactura *s = new subfactura;
@@ -368,8 +368,8 @@ void agregar_factura_principal(rubros **r, factura **f, cliente **c, lote **l, s
 	int cont2 = 1;
 	cont = 0;
 	char codigo_lote[30]; 
-	int unidades;
-	double precio, venta;
+	long int unidades;
+	long double precio, venta;
 	do {
 		do {
 			if (cont) printf("\nError! Ingrese un lote existente!\n");
@@ -451,7 +451,7 @@ void agregar_lote_principal(rubros **r, factura **f, cliente **c, lote **l, sucu
 	} while (!(buscar_subrubro(r, rub, subrub)));
 	printf("\n");
 	cont = 0;
-	int unidades;
+	long int unidades;
 	do {
 		if (cont) printf("\nError! Ingrese mas de 0 unidades!\n");
 		printf("Ingrese las unidades: ");
@@ -469,7 +469,7 @@ void agregar_lote_principal(rubros **r, factura **f, cliente **c, lote **l, sucu
 	} while (peso<=0);
 	printf("\n");
 	cont = 0;
-	double costo;
+	long double costo;
 	do {
 		if (cont) printf("\nError! Ingrese un costo positivo!\n");
 		printf("Ingrese el costo en BsF por unidad: ");
@@ -868,9 +868,9 @@ void leer_lotes(lote **p) {
 	}
 	else { 
 		char codigo[30],sucursal[30],rubro[30],subcategoria[30];
-		int unidades, existencia;
+		long int unidades, existencia;
 		float peso;
-		double costo;
+		long double costo;
 
 		while (!(feof(M))) {
 			fscanf(M, "%s", &codigo);
@@ -919,7 +919,7 @@ void leer_cliente(cliente **p) {
 	}
 }
 
-void leer_factura(cliente **p) {//TERMINAR
+void leer_factura(factura **p) {//TERMINAR
 	// Lee datos de archivo de factura
 	FILE* M;
 	M = fopen("facturas.txt", "r");
@@ -930,7 +930,8 @@ void leer_factura(cliente **p) {//TERMINAR
 		exit(1);
 	}
 	else {
-		char nombre[30];
+		char codigo[30], sucursal[30], cliente[30];
+		int dia, mes, year, total;
 
 		while (!(feof(M))) {
 			fscanf(M, "%s", &nombre);
