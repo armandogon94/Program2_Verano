@@ -699,9 +699,43 @@ void mostrar(rubros **r, factura **f, cliente **c, lote **l, sucursal **s) {
 	}
 }
 
+void eliminar_rubro() {
+
+}
+
 void eliminar_rubro_principal(rubros **r) {
+	char palabra[30];
 	system("cls");
-	printf("\n\tELIMINAR \n\n")
+	printf("\n\tELIMINAR RUBRO\n\n");
+	mostrar_rubros(r);
+	int cont = 0;
+	do {
+		if (cont) printf("\n\tError! Ingrese un rubro que exista!");
+		printf("\n\tIngrese el rubro que desea eliminar de los mostrados anteriormente: ");
+		scanf("%s",&palabra);
+		cont++;
+	} while (!(buscar_rubro(r,palabra)));
+	eliminar_rubro(r,palabra);
+	printf("\n\tEl rubro y sus subcategorias han sido eliminadas satisfactoriamente!\n");
+	system("pause");
+}
+
+void eliminar_rubro_menu(rubros **r, factura ** f, lote **l) {
+	int op = -1;
+	while (op) {
+		system("cls");
+		printf("\n\tMENU ELIMINAR RUBRO\n\n");
+		printf("1.\tRubro\n");
+		printf("2.\tSubCategoria\n");
+		scanf("%i", &op);
+
+		switch (op) {
+		case 1: eliminar_rubro_principal(r,f,l);
+			break;
+		case 2: eliminar_subrubro_principal(r);
+			break;
+		}
+	}
 }
 
 void eliminar(rubros **r, factura **f, cliente **c, lote **l, sucursal **s) {
@@ -717,7 +751,7 @@ void eliminar(rubros **r, factura **f, cliente **c, lote **l, sucursal **s) {
 		scanf("%i", &op);
 
 		switch (op) {
-		case 1: eliminar_rubro_principal(r);
+		case 1: eliminar_rubro_menu(r,f,l);
 			break;
 		case 2: eliminar_cliente_principal(c);
 			break;
